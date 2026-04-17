@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: production-ai-agent
+    env: python
+    dockerfilePath: ./Dockerfile
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ENVIRONMENT
+        value: production
+      - key: AGENT_API_KEY
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: cache
+          property: connectionString
+
+  - type: redis
+    name: cache
+    ipAllowList: [] # internal connections only
