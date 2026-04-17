@@ -108,6 +108,16 @@ class AskResponse(BaseModel):
     history_count: int
     timestamp: str
 
+@app.get("/", tags=["Info"])
+@app.head("/", tags=["Info"])
+def root():
+    return {
+        "app": settings.app_name,
+        "version": settings.app_version,
+        "environment": settings.environment,
+        "endpoints": ["/ask", "/health", "/ready"]
+    }
+
 @app.get("/health", tags=["Operations"])
 def health():
     return {
